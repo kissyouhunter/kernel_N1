@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-none-linux-gnu-
+export PATH=/opt/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin/:$PATH
+
+make dtbs
