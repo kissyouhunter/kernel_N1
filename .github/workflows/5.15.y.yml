@@ -13,8 +13,9 @@ env:
   REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
+  GCC: gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu
   KVER: 5.15.y
-  TOOLCHAIN: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+  TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/$(GCC).tar.xz
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -44,15 +45,14 @@ jobs:
         
     - name: Clone repos
       run: |
-        git clone $REPO_URL -b $REPO_BRANCH /tmp/kernel
+        git clone $REPO_URL -b $REPO_BRANCH $BUILD_DIR
         
     - name: Installing cross compile toolchain
       run: |
         cd /opt
         sudo wget $TOOLCHAIN
-        sudo xz -d gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
-        sudo tar xf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar
-        cd /tmp/kernel
+        sudo tar -xvf $(GCC).tar.xz
+        cd $BUILD_DIR
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_clean
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_dtb
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_make
@@ -61,7 +61,7 @@ jobs:
         
     - name: Build Kernel  
       run: |
-        cd /tmp/kernel
+        cd $BUILD_DIR
         cp $GITHUB_WORKSPACE/files/5.15/.config .config -v
         ./set_make
         
