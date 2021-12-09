@@ -68,7 +68,7 @@ jobs:
     - name: Organize files
       id: organize
       run: |
-        cd /tmp && tar -zcvf linux-$KVER.tar.gz linux-$KVER/
+        cd /tmp && tar -zcvf linux-$KVER.tar.gz kernel/
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
