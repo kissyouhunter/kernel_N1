@@ -13,7 +13,6 @@ env:
   REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
-  GCC: gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu
   KVER: 5.15.y
   TOOLCHAIN: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
 jobs:
@@ -51,7 +50,7 @@ jobs:
       run: |
         cd /opt
         sudo wget $TOOLCHAIN
-        sudo tar -xvf $(GCC).tar.xz
+        sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
         cd $BUILD_DIR
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_clean
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_dtb
