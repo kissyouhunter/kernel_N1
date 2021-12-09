@@ -1,4 +1,4 @@
-name: S905D KERNEL CI
+name: S905D KERNEL 5.4.y
 on:
   release:
     types: published
