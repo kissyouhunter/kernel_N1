@@ -68,8 +68,8 @@ jobs:
     - name: Organize files
       id: organize
       run: |
-        cd /tmp && mv kernel $KVER
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        cd /tmp && tar -zcvf linux-$KVER.tar.gz linux-$KVER/
+        echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Upload kernel directory
@@ -77,7 +77,7 @@ jobs:
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: $KVER
-        path: ${{ env.FIRMWARE }}
+        path: ${{ env.KERNEL }}
         
     - name: telegram_bot
       run: |
