@@ -9,11 +9,11 @@ on:
         required: false
         default: 'false'
 env:
-  REPO_URL: https://github.com/unifreq/linux-5.4.y
+  REPO_URL: https://github.com/unifreq/linux-5.10.y
   REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
-  KVER: 5.4.y
+  KVER: 5.10.y
   TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库编译N1内核5.4.y,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库编译N1内核5.10.y,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
         
     - name: Checkout
@@ -61,7 +61,7 @@ jobs:
     - name: Build Kernel  
       run: |
         cd $BUILD_DIR
-        cp $GITHUB_WORKSPACE/files/5.14/.config .config -v
+        cp $GITHUB_WORKSPACE/files/5.10/.config .config -v
         ./set_make
         
     - name: Organize files
@@ -83,5 +83,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库编译N1内核5.4.y顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库编译N1内核5.10.y顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
