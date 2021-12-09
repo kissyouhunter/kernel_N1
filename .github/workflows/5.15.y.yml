@@ -1,16 +1,13 @@
 name: S905D KERNEL 5.15.y
+
 on:
-  release:
-    types: published
-  push:
-    branches:
-      - main
-    paths:
-      - 'armbian files for 5.4.y 5.10.y 5.13.y/5.15/config'
-      - '.github/workflows/5.15.y.yml'
-      - 'patch/**'
-  watch:
-    types: [started]
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
 env:
   REPO_URL: https://github.com/unifreq/linux-5.15.y
   REPO_BRANCH: main
