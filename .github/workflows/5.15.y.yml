@@ -12,12 +12,8 @@ env:
   REPO_URL: https://github.com/unifreq/linux-5.15.y
   REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
-  MODURL: https://github.com/RinCat/RTL88x2BU-Linux-Driver 
-  INSTALLM_URL: https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/install_kmod.sh
-  INSTALL_URL: https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/install_kernel.sh
-  CONFIG_URL: https://raw.githubusercontent.com/SuzukiHonoka/s905d-kernel-precompiled/master/.config 
+  SERVERCHAN_SCKEY: true
   KVER: 5.15.y
-  KURL:  https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/setup_new_kernel.sh
   TOOLCHAIN: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
 jobs:
   build:
