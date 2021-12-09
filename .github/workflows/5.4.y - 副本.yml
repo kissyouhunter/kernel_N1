@@ -1,0 +1,126 @@
+name: S905D KERNEL 5.4.y
+on:
+  release:
+    types: published
+  push:
+    branches:
+      - main
+    paths:
+      - '.config'
+      - '.github/workflows/main.yml'
+      - 'patch/**'
+  watch:
+    types: [started]
+env:
+  REPO_URL: https://github.com/unifreq/linux-5.15.y
+  REPO_BRANCH: main
+  BUILD_DIR: /opt
+  MODURL: https://github.com/RinCat/RTL88x2BU-Linux-Driver 
+  INSTALLM_URL: https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/install_kmod.sh
+  INSTALL_URL: https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/install_kernel.sh
+  CONFIG_URL: https://raw.githubusercontent.com/SuzukiHonoka/s905d-kernel-precompiled/master/.config 
+  KVER: 5.15.7
+  KURL:  https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/setup_new_kernel.sh
+  TOOLCHAIN: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - name: telegrame_bot
+      run: |
+        if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
+          您正在使用kissyouhunter仓库编译N1内核5.4.y,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+        fi
+        
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+    - name: Host info
+      run: |
+        pwd
+        ls -lah
+        lscpu
+        free -h
+        df -h 
+    - name: Installing requirements 
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison libncurses-dev autoconf dkms libudev-dev libpci-dev libiberty-dev u-boot-tools lzop
+    - name: Clone repos
+      run: |
+        wget $KURL
+        sh setup_new_kernel.sh $KVER
+        git clone $REPO_URL -b $REPO_BRANCH /opt/kernel
+    - name: Installing cross compile toolchain
+      run: |
+        cd /opt
+        wget $TOOLCHAIN
+        xz -d gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+        tar xf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar
+        export PATH=$PATH:/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin
+        echo 'PATH=$PATH:/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin' > ~/.bashrc
+        source ~/.bashrc
+        export ARCH=arm64
+        export CROSS_COMPILE=/tmp/ramfs/toolchain/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+    - name: Build Kernel  
+      run: |
+        cd /tmp/ramfs/build/linux-$KVER
+        for p in `ls $GITHUB_WORKSPACE/patch`; do patch --ignore-whitespace -t -p1 -N < $GITHUB_WORKSPACE/patch/$p; done
+        cp $GITHUB_WORKSPACE/.config .config -v
+        sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|" .config
+        touch .scmversion
+        make -j$(nproc) ARCH=arm64 CROSS_COMPILE=/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu- oldconfig
+        make -j$(nproc) ARCH=arm64 CROSS_COMPILE=/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu- LOCALVERSION="-aml-s905d-starx-action" bindeb-pkg
+    - name: Adjust Kernel Image Load addr and cp
+      run: | 
+        cd /tmp/ramfs/build/linux-$KVER
+        cp arch/arm64/boot/Image $GITHUB_WORKSPACE
+        cp arch/arm64/boot/dts/amlogic/*.dtb $GITHUB_WORKSPACE
+        rsync -a ../*$KVER* --exclude=linux-$KVER $GITHUB_WORKSPACE
+    - name: Build KERNEL MOD
+      run: |
+        # cd /tmp/ramfs/build/KMOD
+        # make -j$(nproc) ARCH=arm64 CROSS_COMPILE=/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu- KSRC=/tmp/ramfs/build/linux-$KVER
+        # cp 88x2bu.ko $GITHUB_WORKSPACE
+    - name: LIST FILES
+      run: |
+        echo "ROOT DIR"
+        ls -lah $GITHUB_WORKSPACE
+        echo "BOOT IMAGE"
+        ls -lah /tmp/ramfs/build/linux-$KVER/arch/arm64/boot/
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Kernel ${{ env.KVER }}
+        path: |
+          88x2bu.ko
+          install_kmod.sh
+          install_kernel.sh
+          Image
+          *${{ env.KVER }}*
+          .config
+          *.dtb
+    - name: ZIP FILES
+      run: |
+        cd $GITHUB_WORKSPACE
+        zip data.zip install_kernel.sh Image *${{ env.KVER }}* .config *.dtb 88x2bu.ko install_kmod.sh
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.KVER }}
+        release_name: Linux Kernel ${{ env.KVER }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./data.zip
+        asset_name: Kernel ${{ env.KVER }}.zip
+        asset_content_type: application/zip
