@@ -13,9 +13,9 @@ env:
   REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
-  GCC: gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu
+  gcc: gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu
   KVER: 5.15.y
-  TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/$(GCC).tar.xz
+  TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/$(gcc).tar.xz
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -51,7 +51,7 @@ jobs:
       run: |
         cd /opt
         sudo wget $TOOLCHAIN
-        sudo tar -xvf $(GCC).tar.xz
+        sudo tar -xvf $(gcc).tar.xz
         cd $BUILD_DIR
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_clean
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_dtb
