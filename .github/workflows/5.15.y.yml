@@ -62,7 +62,7 @@ jobs:
     - name: Build Kernel  
       run: |
         cd /tmp/kernel
-        cp $GITHUB_WORKSPACE/armbian files for 5.4.y 5.10.y 5.13.y/5.15/.config .config -v
+        cp $GITHUB_WORKSPACE/files/5.15/.config .config -v
         ./set_make
         
     - name: Organize files
