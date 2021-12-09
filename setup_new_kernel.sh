@@ -2,9 +2,9 @@
 ARG1=$1
 ROOT_DIR="/tmp/ramfs"
 BUILD_DIR="$ROOT_DIR/build"
-SRCURL="https://github.com/SuzukiHonoka/$REPO"
-CONFIG="https://github.com/SuzukiHonoka/s905d-kernel-precompiled/raw/master/.config"
-KVERV="5.9.1"
+SRCURL="https://github.com/kissyouhunter/$REPO"
+CONFIG="https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/.config"
+KVERV="5.15.7"
 
 if [ ! -z "$ARG1" ]; then
 KVERV=$ARG1
