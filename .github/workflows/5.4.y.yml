@@ -1,4 +1,4 @@
-name: S905D KERNEL 5.4.y
+name: S905D KERNEL 5.15.y
 
 on:
   repository_dispatch:
@@ -14,7 +14,7 @@ env:
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
   KVER: 5.4.y
-  TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+  TOOLCHAIN: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -61,7 +61,7 @@ jobs:
     - name: Build Kernel  
       run: |
         cd $BUILD_DIR
-        cp $GITHUB_WORKSPACE/files/5.14/.config .config -v
+        cp $GITHUB_WORKSPACE/files/5.4/.config .config -v
         ./set_make
         
     - name: Organize files
