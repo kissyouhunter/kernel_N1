@@ -19,7 +19,7 @@ env:
   CONFIG_URL: https://raw.githubusercontent.com/SuzukiHonoka/s905d-kernel-precompiled/master/.config 
   KVER: 5.14.11
   KURL:  https://github.com/SuzukiHonoka/PHICOMM_N1_SHELL_API/raw/master/setup_new_kernel.sh
-  TOOLCHAIN: https://github.com/SuzukiHonoka/s905d-kernel-precompiled/releases/download/gcc-10.2/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
+  TOOLCHAIN: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -47,10 +47,10 @@ jobs:
       run: |
         cd /tmp/ramfs && mkdir toolchain && cd toolchain
         wget $TOOLCHAIN
-        xz -d gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
-        tar xf gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar
-        export PATH=$PATH:/tmp/ramfs/toolchain/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin
-        echo 'PATH=$PATH:/tmp/ramfs/toolchain/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin' > ~/.bashrc
+        xz -d gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+        tar xf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar
+        export PATH=$PATH:/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin
+        echo 'PATH=$PATH:/tmp/ramfs/toolchain/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu/bin' > ~/.bashrc
         source ~/.bashrc
         export ARCH=arm64
         export CROSS_COMPILE=/tmp/ramfs/toolchain/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
