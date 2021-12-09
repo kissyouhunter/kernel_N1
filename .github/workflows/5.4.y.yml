@@ -52,10 +52,10 @@ jobs:
         sudo wget $TOOLCHAIN
         sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
         cd $BUILD_DIR
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_clean
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_dtb
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_make
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.15/set_menuconfig
+        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.4/set_clean
+        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.4/set_dtb
+        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.4/set_make
+        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.4/set_menuconfig
         chmod 755 set_*
         
     - name: Build Kernel  
