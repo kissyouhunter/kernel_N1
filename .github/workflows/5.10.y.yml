@@ -53,16 +53,16 @@ jobs:
         sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
         cd $BUILD_DIR
         rm -f set_*
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_clean
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_dtb
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_make
-        wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_menuconfig
+        cp $GITHUB_WORKSPACE/files/5.10/set_clean set_clean -v
+        cp $GITHUB_WORKSPACE/files/5.10/set_dtb set_dtb -v
+        cp $GITHUB_WORKSPACE/files/5.10/set_make set_make -v
+        cp $GITHUB_WORKSPACE/files/5.10/set_menuconfig set_menuconfig -v
+        cp $GITHUB_WORKSPACE/files/5.10/.config .config -v  
         chmod 755 set_*
         
     - name: Build Kernel  
       run: |
         cd $BUILD_DIR
-        cp $GITHUB_WORKSPACE/files/5.10/.config .config -v
         ./set_make
         
     - name: Organize files
