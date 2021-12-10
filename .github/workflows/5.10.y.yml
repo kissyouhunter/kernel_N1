@@ -59,6 +59,13 @@ jobs:
         cp $GITHUB_WORKSPACE/files/5.10/set_menuconfig set_menuconfig -v
         cp $GITHUB_WORKSPACE/files/5.10/.config .config -v  
         chmod 755 set_*
+
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}    
         
     - name: Build Kernel  
       run: |
