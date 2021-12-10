@@ -86,6 +86,12 @@ jobs:
       with:
         name: linux-${{ env.KVER }}
         path: ${{ env.KERNEL }}
+
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
         
     - name: telegram_bot
       run: |
