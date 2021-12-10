@@ -52,6 +52,7 @@ jobs:
         sudo wget $TOOLCHAIN
         sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
         cd $BUILD_DIR
+        rm -f set_*
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_clean
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_dtb
         wget https://raw.githubusercontent.com/kissyouhunter/kernel_N1/main/files/5.10/set_make
