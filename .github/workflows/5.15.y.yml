@@ -45,8 +45,8 @@ jobs:
     - name: Clone repos
       run: |
         git clone $REPO_URL -b $REPO_BRANCH $BUILD_DIR
-        cd $BUILD_DIR
-        wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.12.tar.xz && tar -xvf linux-5.15.12.tar.xz
+        cd /tmp
+        wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.12.tar.xz && tar -xf linux-5.15.12.tar.xz
         cp -ar /tmp/linux-5.15.12/* $BUILD_DIR/
         rm -rf /tmp/linux-5.15.12/
         
@@ -54,7 +54,7 @@ jobs:
       run: |
         cd /opt
         sudo wget $TOOLCHAIN
-        sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+        sudo tar -xf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
         cd $BUILD_DIR
         rm -f set_*
         cp $GITHUB_WORKSPACE/files/5.15/set_clean set_clean -v
