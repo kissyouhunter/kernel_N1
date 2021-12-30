@@ -45,10 +45,6 @@ jobs:
     - name: Clone repos
       run: |
         git clone $REPO_URL -b $REPO_BRANCH $BUILD_DIR
-        cd /tmp
-        wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.12.tar.xz && tar -xf linux-5.15.12.tar.xz
-        cp -ar /tmp/linux-5.15.12/* $BUILD_DIR/
-        rm -rf /tmp/linux-5.15.12/
         
     - name: Installing cross compile toolchain
       run: |
