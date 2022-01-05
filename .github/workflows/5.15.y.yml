@@ -50,7 +50,7 @@ jobs:
       run: |
         cd /opt
         sudo wget $TOOLCHAIN
-        sudo tar -xf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+        sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
         cd $BUILD_DIR
         rm -f set_*
         cp $GITHUB_WORKSPACE/files/5.15/set_clean set_clean -v
@@ -75,7 +75,7 @@ jobs:
     - name: Organize files
       id: organize
       run: |
-        cd /tmp && mv kernel/ linux-$KVER && tar -zcf linux-$KVER.tar.gz linux-$KVER/
+        cd /tmp && mv kernel/ linux-$KVER && tar -zcvf linux-$KVER.tar.gz linux-$KVER/
         mkdir -p /tmp/upload && cp /tmp/linux-$KVER.tar.gz /tmp/upload && cd /tmp/upload
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
