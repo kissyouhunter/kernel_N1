@@ -19,7 +19,7 @@ env:
   SERVERCHAN_SCKEY: true
   KVER: 5.4.y
   TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
-  ARMBIAN_VER: Armbian_22.02.0_Aml_s905d_bullseye_5.10.100_2022.02.12.0039.img.gz
+  ARMBIAN_VER: Armbian_22.02.0_Aml_s905d_bullseye_5.10.100_2022.02.12.0039
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -88,9 +88,9 @@ jobs:
         ./set_make
         cd /tmp && mv kernel/ linux-$KVER && tar -zcvf linux-$KVER.tar.gz linux-$KVER/
         mkdir -p /tmp/upload && cp /tmp/linux-$KVER.tar.gz /tmp/upload && cd /tmp/upload
-        curl -# -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/$ARMBIAN_VER
-        gzip -d $ARMBIAN_VER
-        sudo losetup -P -f --show $ARMBIAN_VER
+        curl -# -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/$ARMBIAN_VER.img.gz
+        gzip -d $ARMBIAN_VER.img.gz
+        sudo losetup -P -f --show $ARMBIAN_VER.img
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}")
         sudo mount /dev/${loop_armbian}p2 /mnt/
         sudo mount /dev/${loop_armbian}p1 /mnt/boot/
