@@ -1,10 +1,37 @@
 #! /bin/bash
+
+TIME() {
+[[ -z "$1" ]] && {
+	echo -ne " "
+} || {
+     case $1 in
+	r) export Color="\e[31;1m";;
+	g) export Color="\e[32;1m";;
+	b) export Color="\e[34;1m";;
+	y) export Color="\e[33;1m";;
+	z) export Color="\e[35;1m";;
+	l) export Color="\e[36;1m";;
+	w) export Color="\e[29;1m";;
+      esac
+	[[ $# -lt 2 ]] && echo -e "\e[36m\e[0m ${1}" || {
+		echo -e "\e[36m\e[0m ${Color}${2}\e[0m"
+	 }
+      }
+}
+
+#读取新、旧内核版本
+#read -p "please enter the new kernel:" N1
+#read -p "please enter the old kernel:" N2
+#read -p "please enter the kernel_code:" N3
+#number1=$N1
+#number2=$N2
+#number3=$N3
 #即将安装的内核版本
-new_kernel=5.15.7-kissyouhunter
+new_kernel=n1kernel-kissyouhunter
 #安装完新内核删除老内核版本
-old_kernel=5.10.84-kissyouhunter
+old_kernel=5.10.100-kissyouhunter
 #内核源码
-kernel_code=linux-5.15.y
+kernel_code=linux-kernelnumber
 #各文件路径变量
 root_path=/root
 boot_path=/boot
@@ -13,10 +40,19 @@ new_dtb_path=/arch/arm64/boot/dts/amlogic
 modules_path=/usr/lib/modules
 cd ${root_path}
 #解压 Armbian 源码包
-unzip ${kernel_code}.zip
-rm -f ${kernel_code}.zip
+#unzip ${kernel_code}.tar.gz.zip
+#rm -f ${kernel_code}.tar.gz.zip
 tar zxvf ${kernel_code}.tar.gz
+rm -f ${kernel_code}.tar.gz
 mv ${kernel_code} ${new_kernel}
+
+if [ -a "${root_path}/${new_kernel}" ]; then
+    TIME g "success!"
+else
+    TIME r "failed!"
+    exit 0
+fi
+
 #安装内核模块
 cd ${new_kernel}
 make modules_install && make install
@@ -37,4 +73,19 @@ rm -r ${boot_path}/boot-${new_kernel}.tar.gz
 rm -r ${dtb_path}/dtb-amlogic-${new_kernel}.tar.gz
 rm -r ${modules_path}/modules-${new_kernel}.tar.gz
 rm -rf ${root_path}/${new_kernel}
-rm -f ${kernel_code}.tar.gz
+#判断文件是否存在
+if [[ -a "${root_path}/boot-${new_kernel}.tar.gz" && -a "${root_path}/dtb-amlogic-${new_kernel}.tar.gz" && -a "${root_path}/modules-${new_kernel}.tar.gz" ]]; then
+	TIME g "   _____ _    _  _____ _____ ______  _____ _____ _ "
+	TIME g "  / ____| |  | |/ ____/ ____|  ____|/ ____/ ____| |"
+	TIME g " | (___ | |  | | |   | |    | |__  | (___| (___ | |"
+	TIME g "  \___ \| |  | | |   | |    |  __|  \___ \\___ \| |"
+	TIME g "  ____) | |__| | |___| |____| |____ ____) |___) |_|"
+	TIME g " |_____/ \____/ \_____\_____|______|_____/_____/(_)"
+else
+	TIME r "______ ___  _____ _      ___________ _ "
+	TIME r "|  ___/ _ \|_   _| |    |  ___|  _  \ |"
+	TIME r "| |_ / /_\ \ | | | |    | |__ | | | | |"
+	TIME r "|  _||  _  | | | | |    |  __|| | | | |"
+	TIME r "| |  | | | |_| |_| |____| |___| |/ /|_|"
+	TIME r "\_|  \_| |_/\___/\_____/\____/|___/ (_)"
+fi
