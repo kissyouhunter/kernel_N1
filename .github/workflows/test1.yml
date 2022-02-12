@@ -73,7 +73,6 @@ jobs:
         sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
         cd /mnt/ && sudo chroot .
         cd root
-        apt update && apt upgrade -y
         new_kernel=${KERNEL_5_4_Y}-kissyouhunter
         old_kernel=5.10.100-kissyouhunter
         kernel_code=linux-5.4.y
