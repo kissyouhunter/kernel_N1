@@ -64,8 +64,8 @@ jobs:
         
     - name: Build Kernel  
       run: |
-        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && cd /tmp/upload && curl -# -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/linux-${KVER}.tar.gz
-        curl -# -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
+        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && cd /tmp/upload && curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/linux-${KVER}.tar.gz
+        curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
         sudo mount ${loop_armbian}p2 /mnt/
