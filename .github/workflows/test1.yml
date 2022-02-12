@@ -71,14 +71,33 @@ jobs:
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
         sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
-        sudo cp /tmp/upload/linux-${KVER}.tar.gz /mnt/root/ && sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
-        sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
-        sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
         cd /mnt/ && sudo chroot .
         cd root
         apt update && apt upgrade -y
-        chmod +x install_kernel.sh
-        ./install_kernel.sh
+        new_kernel=${KERNEL_5_4_Y}-kissyouhunter
+        old_kernel=5.10.100-kissyouhunter
+        kernel_code=linux-5.4.y
+        root_path=/root
+        boot_path=/boot
+        dtb_path=/boot/dtb/amlogic
+        new_dtb_path=/arch/arm64/boot/dts/amlogic
+        modules_path=/usr/lib/modules
+        tar zxvf ${kernel_code}.tar.gz
+        rm -f ${kernel_code}.tar.gz
+        mv ${kernel_code} ${new_kernel}
+        cd ${new_kernel}
+        make modules_install && make install
+        cd ${boot_path} && cp -r vmlinuz-${new_kernel} zImage && cp -r uInitrd uInitrd-${new_kernel}
+        cd ${dtb_path} && rm -f *
+        cp ${root_path}/${new_kernel}/${new_dtb_path}/*.dtb ${dtb_path}
+        cd ${boot_path} && tar zcvf boot-${new_kernel}.tar.gz *-${new_kernel} && cp -r boot-${new_kernel}.tar.gz ${root_path}
+        cd ${dtb_path} && tar zcvf dtb-amlogic-${new_kernel}.tar.gz *.dtb && cp -r dtb-amlogic-${new_kernel}.tar.gz ${root_path}
+        cd ${modules_path} && tar zcvf modules-${new_kernel}.tar.gz ${new_kernel} && cp -r modules-${new_kernel}.tar.gz ${root_path}
+        rm -r ${boot_path}/*-${old_kernel} && rm -r ${modules_path}/${old_kernel}
+        rm -r ${boot_path}/boot-${new_kernel}.tar.gz
+        rm -r ${dtb_path}/dtb-amlogic-${new_kernel}.tar.gz
+        rm -r ${modules_path}/modules-${new_kernel}.tar.gz
+        rm -rf ${root_path}/${new_kernel}
         exit
         sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
