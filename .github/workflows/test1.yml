@@ -70,13 +70,13 @@ jobs:
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
-        sudo mount ${loop_armbian}p2 /mnt/
-        sudo mount ${loop_armbian}p1 /mnt/boot/
+        sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
         sudo cp /tmp/upload/linux-${KVER}.tar.gz /mnt/root/ && sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
         sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
         cd /mnt/ && sudo chroot .
-        cd root 
+        cd root
+        apt update && apt upgrade -y
         chmod +x install_kernel.sh
         ./install_kernel.sh
         exit
@@ -84,6 +84,8 @@ jobs:
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/modules-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         cd /tmp/upload/ && tar -zcvf ${KERNEL_5_4_Y}.tar.gz ${KERNEL_5_4_Y}
+        sudo umount /mnt/boot/ && sudo umount /mnt/
+        sudo losetup -d ${loop_armbian}
         rm -rf ${KERNEL_5_4_Y} && rm -f ${ARMBIAN_VER}.img
 
     - name: Organize files
