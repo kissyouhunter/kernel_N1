@@ -87,25 +87,27 @@ jobs:
         cd $BUILD_DIR                    
         ./set_make
         cd /tmp && mv kernel/ linux-$KVER && tar -zcvf linux-$KVER.tar.gz linux-$KVER/
-        mkdir -p /tmp/upload && cp /tmp/linux-$KVER.tar.gz /tmp/upload && cd /tmp/upload
+        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && cp /tmp/linux-$KVER.tar.gz /tmp/upload && cd /tmp/upload
         curl -# -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
         sudo mount ${loop_armbian}p2 /mnt/
         sudo mount ${loop_armbian}p1 /mnt/boot/
-        sudo cp /tmp/upload/linux-$KVER.tar.gz /mnt/root/ && sudo sh -c 'cd /mnt/root/' && sudo cp $GITHUB_WORKSPACE/install_kernel.sh install_kernel.sh -v
-        sudo sed -i 's|n1kernel|'"KERNEL_5_4_Y"'|g' ./install_kernel.sh
-        sudo sed -i 's|kernelnumber|'"KVER"'|g' ./install_kernel.sh
+        sudo cp /tmp/upload/linux-$KVER.tar.gz /mnt/root/ && sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
+        sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
+        sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
         cd /mnt/ && sudo chroot .
         cd /root && chmod +x install_kernel.sh && ./install_kernel.sh && exit
-        sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload
-        sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload
-        sudo cp /mnt/root/modules-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload
+        sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
+        sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
+        sudo cp /mnt/root/modules-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
+        cd /tmp/upload/${KERNEL_5_4_Y} && tar -zcvf ${KERNEL_5_4_Y}.tar.gz ${KERNEL_5_4_Y} && rm -rf ${KERNEL_5_4_Y}
 
     - name: Organize files
       id: organize
       run: |
         cd /tmp/upload
+        rm -f ${ARMBIAN_VER}.img
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
