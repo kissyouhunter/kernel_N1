@@ -87,7 +87,7 @@ jobs:
         cd $BUILD_DIR                    
         ./set_make
         cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
-        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && cp /tmp/linux-${KVER}.tar.gz /tmp/upload && cd /tmp/upload
+        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload && cd /tmp/upload
         curl -# -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
