@@ -73,7 +73,8 @@ jobs:
         sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/modules-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
-        cd /tmp/upload/${KERNEL_5_4_Y} && tar -zcvf ${KERNEL_5_4_Y}.tar.gz ${KERNEL_5_4_Y} && rm -rf ${KERNEL_5_4_Y}
+        cd /tmp/upload/ && tar -zcvf ${KERNEL_5_4_Y}.tar.gz ${KERNEL_5_4_Y}
+        rm -rf ${KERNEL_5_4_Y} && rm -f ${ARMBIAN_VER}.img
 
     - name: Organize files
       id: organize
