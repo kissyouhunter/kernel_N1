@@ -1,4 +1,4 @@
-name: S905D KERNEL test
+name: S905D KERNEL test1
 
 on:
   repository_dispatch:
@@ -55,25 +55,7 @@ jobs:
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install $(curl -fsSL git.io/ubuntu-2004-server)
         sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean        
-        
-    - name: Clone repos
-      run: |
-        git clone $REPO_URL -b $REPO_BRANCH $BUILD_DIR
-        
-    - name: Installing cross compile toolchain
-      run: |
-        cd /opt
-        sudo wget $TOOLCHAIN
-        sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
-        cd $BUILD_DIR
-        rm -f set_*
-        cp $GITHUB_WORKSPACE/files/5.4/set_clean set_clean -v
-        cp $GITHUB_WORKSPACE/files/5.4/set_dtb set_dtb -v
-        cp $GITHUB_WORKSPACE/files/5.4/set_make set_make -v
-        cp $GITHUB_WORKSPACE/files/5.4/set_menuconfig set_menuconfig -v
-        cp $GITHUB_WORKSPACE/files/5.4/.config .config -v
-        chmod 755 set_*
+        sudo -E apt-get -qq clean   
         
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -84,13 +66,7 @@ jobs:
         
     - name: Build Kernel  
       run: |
-        cd $BUILD_DIR                    
-        ./set_make
-
-    - name: Extract Kernel
-      run: |
-        cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
-        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload && cd /tmp/upload
+        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && cd /tmp/upload && curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/linux-${KVER}.tar.gz
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
@@ -99,7 +75,7 @@ jobs:
         sudo chmod +x /mnt/root/install_kernel.sh
         sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
-        sudo chroot /mnt /bin/bash -c "apt update && apt upgrade -y && apt remove -y linux-image-current-meson64 && ./root/install_kernel.sh"
+        sudo chroot /mnt /bin/bash -c "./root/install_kernel.sh"
 
     - name: Organize files
       id: organize
