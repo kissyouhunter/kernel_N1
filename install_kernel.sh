@@ -19,6 +19,10 @@ TIME() {
       }
 }
 
+#更新
+apt update
+apt upgrade -y
+apt remove -y linux-image-current-meson64
 #读取新、旧内核版本
 #read -p "please enter the new kernel:" N1
 #read -p "please enter the old kernel:" N2
