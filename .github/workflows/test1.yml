@@ -74,7 +74,7 @@ jobs:
         sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/ -v && sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
         sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
-        chroot /mnt/root /bin/bash -c "chmod +x /root/install_kernel.sh && ./root/install_kernel.sh"
+        sudo chroot /mnt/root /bin/bash -c "chmod +x /root/install_kernel.sh && ./root/install_kernel.sh"
         exit
         sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
