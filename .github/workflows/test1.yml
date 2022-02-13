@@ -76,6 +76,10 @@ jobs:
         sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
         sudo chroot /mnt /bin/bash -c "apt update && apt upgrade -y && apt remove -y linux-image-current-meson64 && ./root/install_kernel.sh"
+
+    - name: Organize files
+      id: organize
+      run: |
         sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/modules-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
@@ -83,10 +87,6 @@ jobs:
         sudo umount /mnt/boot/ && sudo umount /mnt/
         sudo losetup -d ${loop_armbian}
         rm -rf ${KERNEL_5_4_Y} && rm -f ${ARMBIAN_VER}.img
-
-    - name: Organize files
-      id: organize
-      run: |
         cd /tmp/upload
         rm -f ${ARMBIAN_VER}.img
         echo "KERNEL=$PWD" >> $GITHUB_ENV
