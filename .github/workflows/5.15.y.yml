@@ -99,9 +99,6 @@ jobs:
         sudo chmod +x /mnt/root/install_kernel.sh
         sudo sed -i 's|n1kernel|'"$KERNEL_5_15_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
-        sudo chroot /mnt /bin/bash -c "apt update"
-        sudo chroot /mnt /bin/bash -c "apt upgrade -y"
-        sudo chroot /mnt /bin/bash -c "apt remove -y linux-image-current-meson64"
         sudo chroot /mnt /bin/bash -c "./root/install_kernel.sh"
 
     - name: Organize files
