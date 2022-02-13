@@ -72,9 +72,10 @@ jobs:
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
         sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
         sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/ -v && sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
+        sudo chmod +x /mnt/root/install_kernel.sh
         sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
-        sudo chroot /mnt/root /bin/bash -c "chmod +x /root/install_kernel.sh && ./root/install_kernel.sh"
+        sudo chroot /mnt /bin/bash -c "./root/install_kernel.sh"
         exit
         sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
