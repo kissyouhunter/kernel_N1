@@ -75,7 +75,7 @@ jobs:
         sudo chmod +x /mnt/root/install_kernel.sh
         sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
-        sudo chroot /mnt /bin/bash -c "./root/install_kernel.sh"
+        sudo chroot /mnt /bin/bash -c "apt update && apt upgrade -y && apt remove -y linux-image-current-meson64 && ./root/install_kernel.sh"
         exit
         sudo cp /mnt/root/boot-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_5_4_Y}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_5_4_Y}
