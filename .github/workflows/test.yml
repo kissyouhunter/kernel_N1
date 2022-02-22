@@ -48,7 +48,7 @@ jobs:
          DEBIAN_FRONTEND: noninteractive
       run: |
         sudo apt update
-	sudo apt install -y build-essential crossbuild-essential-arm64 clang llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
+        sudo apt install -y build-essential crossbuild-essential-arm64 clang llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
 
 
     - name: SSH connection to Actions
@@ -60,10 +60,10 @@ jobs:
 
     - name: Clone repos & Download Armbian Rootfs
       run: |
-	cd /opt && sudo mkdir armbian-bullseye-root
-	sudo curl -# -Lo armbian.tar.lz4 $ARMBIAN
-	sudo lz4 -dc ../armbian.tar.lz4 | tar xvf -
-	cd /usr/src
+        cd /opt && sudo mkdir armbian-bullseye-root
+        sudo curl -# -Lo armbian.tar.lz4 $ARMBIAN
+        sudo lz4 -dc ../armbian.tar.lz4 | tar xvf -
+        cd /usr/src
         sudo git clone $KERNEL_URL
         
     - name: Installing Cross Compile Environment
@@ -71,7 +71,7 @@ jobs:
         cd /usr/src
         sudo cp $GITHUB_WORKSPACE/scripts/$KERNEL_VER/* ./ -v
         chmod -R 755 .
-	sudo mv .config $KERNEL_VER -v         
+        sudo mv .config $KERNEL_VER -v         
         
     - name: Build Kernel  
       run: |                    
@@ -80,8 +80,8 @@ jobs:
     - name: Organize files
       id: organize
       run: |
-	cd /opt	&& sudo chmod -R 755 .
-	cd kernel
+        cd /opt	&& sudo chmod -R 755 .
+        cd kernel
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
