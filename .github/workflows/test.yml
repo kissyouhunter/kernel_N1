@@ -15,7 +15,7 @@ env:
   SERVERCHAN_SCKEY: true
   KERNEL_VER: linux-5.4.y
   KERNEL_URL: https://github.com/unifreq/linux-5.4.y.git
-  ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.368f7939c5d47213f8430e975bdd779d.tar.lz4
+  ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.e77f7fc048aae394ebb76f5685ca588a.tar.lz4
 jobs:
   build:
     runs-on: ubuntu-20.04
