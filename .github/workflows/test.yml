@@ -43,8 +43,6 @@ jobs:
         df -h 
 
     - name: Initialization environment
-      env:
-         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo apt update
 	sudo apt install -y build-essential crossbuild-essential-arm64 clang llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
