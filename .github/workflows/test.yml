@@ -1,4 +1,4 @@
-name: S905D testing build kernel (5.4.y)
+name: S905D testing build kernel
 
 on:
   repository_dispatch:
