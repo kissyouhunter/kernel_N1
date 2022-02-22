@@ -76,7 +76,8 @@ jobs:
         
     - name: Build Kernel  
       run: |                    
-        sudo ./usr/src/make4.sh
+        cd /usr/src/
+        sudo ./make4.sh
 
     - name: Organize files
       id: organize
