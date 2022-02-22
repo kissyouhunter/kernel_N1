@@ -48,7 +48,6 @@ jobs:
         echo "deb http://mirrors.kernel.org/ubuntu impish main "  >>  /etc/apt/sources.list
         sudo apt update
         sudo apt install -y gcc-11 build-essential crossbuild-essential-arm64 clang llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
-        sudo apt upgrade -y
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -59,7 +58,7 @@ jobs:
 
     - name: Clone repos & Download Armbian Rootfs
       run: |
-        cd /opt && sudo mkdir armbian-bullseye-root
+        cd /opt && sudo mkdir armbian-bullseye-root && sudo mkdir kernel
         sudo curl -# -Lo armbian.tar.lz4 $ARMBIAN
         cd armbian-bullseye-root
         sudo lz4 -dc ../armbian.tar.lz4 | sudo tar xvf -
