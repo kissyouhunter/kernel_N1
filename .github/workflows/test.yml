@@ -72,7 +72,7 @@ jobs:
         cd /usr/src
         sudo cp $GITHUB_WORKSPACE/scripts/$KERNEL_VER/* ./ -v
         chmod -R 755 .
-        sudo mv .config $KERNEL_VER -v         
+        sudo cp $GITHUB_WORKSPACE/scripts/kernel_5.4.y/.config ./linux-5.4.y/ -v
         
     - name: Build Kernel  
       run: |                    
