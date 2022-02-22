@@ -48,6 +48,8 @@ jobs:
          DEBIAN_FRONTEND: noninteractive
       run: |
         sudo apt update
+	apt install -y build-essential crossbuild-essential-arm64 clang llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
+
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
