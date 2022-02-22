@@ -1,4 +1,4 @@
-name: S905D KERNEL 5.4.y
+name: S905D testing build kernel (5.4.y)
 
 on:
   repository_dispatch:
@@ -11,9 +11,8 @@ on:
 env:
   REPO_URL: https://github.com/unifreq/linux-5.4.y
   REPO_BRANCH: main
-  BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
-  KVER: 5.4.y
+  KERNEL_VER: linux-5.4.y
   KERNEL_URL: https://github.com/unifreq/linux-5.4.y.git
   ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.368f7939c5d47213f8430e975bdd779d.tar.lz4
 jobs:
@@ -68,27 +67,13 @@ jobs:
     - name: Installing Cross Compile Environment
       run: |
         cd /usr/src
-        sudo cp $GITHUB_WORKSPACE/scripts/kernel_5.4.y/* ./ -v
+        sudo cp $GITHUB_WORKSPACE/scripts/$KERNEL_VER/* ./ -v
         chmod -R 755 .
-	sudo mv .config linux-5.4.y -v         
+	sudo mv .config $KERNEL_VER -v         
         
     - name: Build Kernel  
       run: |                    
         sudo ./usr/src/make4.sh
-
-    - name: Extract Kernel
-      run: |
-        cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
-        mkdir -p /tmp/upload/${KERNEL_5_4_Y} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload && cd /tmp/upload
-        curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
-        gzip -d ${ARMBIAN_VER}.img.gz
-        loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
-        sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
-        sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/ -v && sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
-        sudo chmod +x /mnt/root/install_kernel.sh
-        sudo sed -i 's|n1kernel|'"$KERNEL_5_4_Y"'|g' /mnt/root/install_kernel.sh
-        sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
-        sudo chroot /mnt /bin/bash -c "./root/install_kernel.sh"
 
     - name: Organize files
       id: organize
