@@ -82,7 +82,7 @@ jobs:
       id: organize
       run: |
         cd /opt	&& sudo chmod -R 755 .
-        cd kernel
+        cd /opt/kernel
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
