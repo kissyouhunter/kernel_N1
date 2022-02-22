@@ -20,12 +20,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
-    steps:
-    - name: choose kernel
-      run: |
-        set_54x="${{ github.event.inputs.set_54x }}"
-        echo "KERNEL_5_4_Y=${set_54x}" >> $GITHUB_ENV
-        
+    steps:       
     - name: telegrame_bot
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
