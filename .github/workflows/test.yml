@@ -62,7 +62,8 @@ jobs:
       run: |
         cd /opt && sudo mkdir armbian-bullseye-root
         sudo curl -# -Lo armbian.tar.lz4 $ARMBIAN
-        sudo lz4 -dc ../armbian.tar.lz4 | tar xvf -
+        cd armbian-bullseye-root
+        sudo lz4 -dc ../armbian.tar.lz4 | sudo tar xvf -
         cd /usr/src
         sudo git clone $KERNEL_URL
         
