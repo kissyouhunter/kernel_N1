@@ -1,4 +1,4 @@
-name: build kernel 5.10.y
+name: BUILD AARCH64 KERNEL
 
 on:
   repository_dispatch:
@@ -8,24 +8,40 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      set_kernel:
+        description: "KERNEL: 5.4 / 5.10 / 5.15 / 5.16"
+        required: true
+        default: ""
       rename:
-        description: "KERNEL: 5.10.x / none"
-        required: false
-        default: "none"
+        description: "NUMBER: 5.4.x / 5.10.x / 5.15.x / 5.16.x"
+        required: true
+        default: ""
 env:
   SERVERCHAN_SCKEY: true
-  KERNEL_VER: linux-5.10.y
-  KERNEL_URL: https://github.com/unifreq/linux-5.10.y.git
   ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.e77f7fc048aae394ebb76f5685ca588a.tar.lz4
 jobs:
   build:
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-    - name: read kernel
+    - name: choose kernel
       run: |
-        rename="${{ github.event.inputs.rename }}"
-        echo "RENAME=${rename}" >> $GITHUB_ENV
+        set_kernel="${{ github.event.inputs.set_kernel }}"
+        if [ "$set_kernel" = "5.4" ]; then
+            echo "KERNEL_URL=https://github.com/unifreq/linux-5.4.y.git" >> $GITHUB_ENV
+            echo "KERNEL_VER=linux-5.4.y" >> $GITHUB_ENV
+        elif [ "$set_kernel" = "5.10" ]; then
+            echo "KERNEL_URL=https://github.com/unifreq/linux-5.10.y.git" >> $GITHUB_ENV
+            echo "KERNEL_VER=linux-5.10.y" >> $GITHUB_ENV
+        elif [ "$set_kernel" = "5.15" ]; then
+            echo "KERNEL_URL=https://github.com/unifreq/linux-5.15.y.git" >> $GITHUB_ENV
+            echo "KERNEL_VER=linux-5.15.y" >> $GITHUB_ENV
+        elif [ "$set_kernel" = "5.16" ]; then
+            echo "KERNEL_URL=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
+            echo "KERNEL_VER=linux-5.16.y" >> $GITHUB_ENV
+        fi
+        set_number="${{ github.event.inputs.set_number }}"
+        echo "KERNEL_NUMBER=${set_number}" >> $GITHUB_ENV
 
     - name: telegrame_bot
       run: |
@@ -49,7 +65,7 @@ jobs:
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: Initialization environment
       env:
@@ -63,7 +79,6 @@ jobs:
         sudo apt install -y gcc-11 clang-13
         sudo apt install -y build-essential crossbuild-essential-arm64 lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
         sudo apt install -y llvm clang
-
 
     - name: Clone repos & Download Armbian Rootfs
       run: |
@@ -84,7 +99,7 @@ jobs:
     - name: Build Kernel  
       run: |                    
         cd /usr/src/
-        sudo ./make10.sh
+        sudo ./make16.sh
 
     - name: Organize files
       id: organize
