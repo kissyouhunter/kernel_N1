@@ -9,16 +9,17 @@ on:
         required: false
         default: 'false'
       set_516x:
-        description: "KERNEL: 5.16.x / none"
-        required: false
-        default: "none"
+        description: "KERNEL: 5.16.x"
+        required: true
+        default: ""
 env:
   REPO_URL: https://github.com/unifreq/linux-5.16.y
   REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
   KVER: 5.16.y
-  TOOLCHAIN: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu/gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+  TOOLCHAIN_URL: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu
+  TOOLCHAIN: gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
   ARMBIAN_VER: Armbian_22.02.0_Aml_s905d_bullseye_5.10.100_2022.02.12.0039
 jobs:
   build:
@@ -64,15 +65,15 @@ jobs:
     - name: Installing cross compile toolchain
       run: |
         cd /opt
-        sudo wget $TOOLCHAIN
-        sudo tar -xvf gcc-linaro-11.2.1-2021.12-x86_64_aarch64-linux-gnu.tar.xz
+        sudo wget $TOOLCHAIN_URL/$TOOLCHAIN
+        sudo tar -xvf $TOOLCHAIN
         cd $BUILD_DIR
         rm -f set_*
-        cp $GITHUB_WORKSPACE/files/5.16/set_clean set_clean -v
-        cp $GITHUB_WORKSPACE/files/5.16/set_dtb set_dtb -v
-        cp $GITHUB_WORKSPACE/files/5.16/set_make set_make -v
-        cp $GITHUB_WORKSPACE/files/5.16/set_menuconfig set_menuconfig -v
-        cp $GITHUB_WORKSPACE/files/5.16/.config .config -v        
+        cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_clean set_clean -v
+        cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_dtb set_dtb -v
+        cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_make set_make -v
+        cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_menuconfig set_menuconfig -v
+        cp $GITHUB_WORKSPACE/files/linux-${KVER}/.config .config -v    
         chmod 755 set_*
         
     - name: SSH connection to Actions
