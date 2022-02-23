@@ -40,7 +40,7 @@ jobs:
             echo "REPO_URL=https://github.com/unifreq/linux-5.15.y.git" >> $GITHUB_ENV
             echo "KVER=5.15.y" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.16" ]; then
-            echo "REPO_UR=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
+            echo "REPO_URL=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
             echo "KVER=5.16.y" >> $GITHUB_ENV
         fi
         set_number="${{ github.event.inputs.set_number }}"
