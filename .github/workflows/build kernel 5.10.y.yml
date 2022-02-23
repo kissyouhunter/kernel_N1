@@ -1,4 +1,4 @@
-name: build kernel 5.4.y
+name: build kernel 5.10.y
 
 on:
   repository_dispatch:
@@ -11,8 +11,8 @@ on:
 
 env:
   SERVERCHAN_SCKEY: true
-  KERNEL_VER: linux-5.4.y
-  KERNEL_URL: https://github.com/unifreq/linux-5.4.y.git
+  KERNEL_VER: linux-5.10.y
+  KERNEL_URL: https://github.com/unifreq/linux-5.10.y.git
   ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.e77f7fc048aae394ebb76f5685ca588a.tar.lz4
 jobs:
   build:
