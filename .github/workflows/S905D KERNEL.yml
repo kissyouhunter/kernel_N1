@@ -17,7 +17,6 @@ on:
         required: true
         default: ""        
 env:
-  REPO_BRANCH: main
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
   TOOLCHAIN_URL: https://snapshots.linaro.org/gnu-toolchain/11.2-2021.12-1/aarch64-linux-gnu
@@ -76,7 +75,7 @@ jobs:
         
     - name: Clone repos
       run: |
-        git clone $REPO_URL -b $REPO_BRANCH $BUILD_DIR
+        git clone $REPO_URL $BUILD_DIR
         
     - name: Installing cross compile toolchain
       run: |
