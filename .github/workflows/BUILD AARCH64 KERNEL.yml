@@ -30,15 +30,19 @@ jobs:
         if [ "$set_kernel" = "5.4" ]; then
             echo "KERNEL_URL=https://github.com/unifreq/linux-5.4.y.git" >> $GITHUB_ENV
             echo "KERNEL_VER=linux-5.4.y" >> $GITHUB_ENV
+            echo "MAKE=make4.sh" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.10" ]; then
             echo "KERNEL_URL=https://github.com/unifreq/linux-5.10.y.git" >> $GITHUB_ENV
             echo "KERNEL_VER=linux-5.10.y" >> $GITHUB_ENV
+            echo "MAKE=make10.sh" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.15" ]; then
             echo "KERNEL_URL=https://github.com/unifreq/linux-5.15.y.git" >> $GITHUB_ENV
             echo "KERNEL_VER=linux-5.15.y" >> $GITHUB_ENV
+            echo "MAKE=make15.sh" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.16" ]; then
             echo "KERNEL_URL=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
             echo "KERNEL_VER=linux-5.16.y" >> $GITHUB_ENV
+            echo "MAKE=make16.sh" >> $GITHUB_ENV
         fi
         set_number="${{ github.event.inputs.set_number }}"
         echo "KERNEL_NUMBER=${set_number}" >> $GITHUB_ENV
@@ -99,7 +103,7 @@ jobs:
     - name: Build Kernel  
       run: |                    
         cd /usr/src/
-        sudo ./make16.sh
+        sudo ./${MAKE}
 
     - name: Organize files
       id: organize
