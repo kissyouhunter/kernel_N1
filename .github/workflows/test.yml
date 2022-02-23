@@ -80,8 +80,10 @@ jobs:
     - name: Organize files
       id: organize
       run: |
-        cd /opt	&& sudo chmod -R 755 .
-        cd /opt/kernel
+        sudo mkdir -p /opt/upload
+        cd /opt/upload
+        sudo tar -zcvf kernel.tar.gz /opt/kernel/
+        sudo chmod -R 777 .
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
