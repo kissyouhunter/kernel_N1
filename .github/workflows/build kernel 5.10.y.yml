@@ -44,6 +44,13 @@ jobs:
         free -h
         df -h 
 
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
+
     - name: Initialization environment
       env:
          DEBIAN_FRONTEND: noninteractive
@@ -53,14 +60,8 @@ jobs:
         sudo chmod 777 /etc/apt/sources.list
         echo "deb http://mirrors.kernel.org/ubuntu impish main universe"  >>  /etc/apt/sources.list
         sudo apt update
-        sudo apt install -y gcc-11 build-essential crossbuild-essential-arm64 clang llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
+        sudo apt install -y gcc-11 build-essential crossbuild-essential-arm64 clang-13 llvm lld qemu-user-static git flex bison ccache libssl-dev pigz zstd xz-utils lzma lz4
 
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
 
     - name: Clone repos & Download Armbian Rootfs
       run: |
