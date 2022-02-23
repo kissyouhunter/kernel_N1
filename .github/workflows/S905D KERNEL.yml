@@ -31,13 +31,13 @@ jobs:
       run: |
         set_kernel="${{ github.event.inputs.set_kernel }}"
         if [ "$set_kernel" = "5.4" ]; then
-            echo "REPO_UR=https://github.com/unifreq/linux-5.4.y.git" >> $GITHUB_ENV
+            echo "REPO_URL=https://github.com/unifreq/linux-5.4.y.git" >> $GITHUB_ENV
             echo "KVER=5.4.y" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.10" ]; then
-            echo "REPO_UR=https://github.com/unifreq/linux-5.10.y.git" >> $GITHUB_ENV
+            echo "REPO_URL=https://github.com/unifreq/linux-5.10.y.git" >> $GITHUB_ENV
             echo "KVER=5.10.y" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.15" ]; then
-            echo "REPO_UR=https://github.com/unifreq/linux-5.15.y.git" >> $GITHUB_ENV
+            echo "REPO_URL=https://github.com/unifreq/linux-5.15.y.git" >> $GITHUB_ENV
             echo "KVER=5.15.y" >> $GITHUB_ENV
         elif [ "$set_kernel" = "5.16" ]; then
             echo "REPO_UR=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
