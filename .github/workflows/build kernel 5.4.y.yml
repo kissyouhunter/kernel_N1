@@ -8,7 +8,10 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-
+      rename:
+        description: "KERNEL: 5.4.x / none"
+        required: false
+        default: "none"
 env:
   SERVERCHAN_SCKEY: true
   KERNEL_VER: linux-5.4.y
@@ -19,11 +22,16 @@ jobs:
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
     steps:       
+    - name: read kernel
+      run: |
+        rename="${{ github.event.inputs.rename }}"
+        echo "RENAME=${rename}" >> $GITHUB_ENV
+
     - name: telegrame_bot
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库编译 test 内核,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库编译 "${{ github.event.inputs.rename }}" 内核,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
 
     - name: Checkout
@@ -79,8 +87,9 @@ jobs:
       id: organize
       run: |
         sudo mkdir -p /opt/upload
+        sudo mv /opt/kernel /opt/${RENAME}
         cd /opt/upload
-        sudo tar -zcvf kernel.tar.gz /opt/kernel/
+        sudo tar -zcvf kernel.tar.gz /opt/${RENAME}/
         sudo chmod -R 777 .
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
@@ -101,5 +110,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库编译 test 内核顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库编译 "${{ github.event.inputs.rename }}" 内核顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
