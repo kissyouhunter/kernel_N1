@@ -18,7 +18,7 @@ on:
         default: ""
 env:
   SERVERCHAN_SCKEY: true
-  ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.e77f7fc048aae394ebb76f5685ca588a.tar.lz4
+  ARMBIAN: https://armbian.chi.auroradev.org/dl/_rootfs/bullseye-cli-arm64.d45e0076f3426d71b4b5f47227d73407.tar.lz4
 jobs:
   build:
     runs-on: ubuntu-20.04
