@@ -116,7 +116,7 @@ jobs:
         sudo chmod +x /mnt/root/install_kernel.py
         sudo sed -i 's|n1kernel|'"$KERNEL_NUMBER"'|g' /mnt/root/install_kernel.py
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.py
-        sudo chroot /mnt python -c "./root/install_kernel.py"
+        sudo chroot /mnt python3 -c "./root/install_kernel.py"
 
     - name: Organize files
       id: organize
