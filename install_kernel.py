@@ -12,7 +12,7 @@ os.system('apt update && apt upgrade -y && apt remove -y linux-image-current-mes
 author = 'kissyouhunter'
 new_kernel = n1kernel+'-'+author
 #print(new_kernel)
-old_kernel = 5.10.100+'-'+author
+old_kernel = '5.10.100-'+author
 #print(old_kernel)
 kernel_code = 'linux-'+kernelnumber
 #print(kernel_code)
