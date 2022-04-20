@@ -83,6 +83,7 @@ jobs:
 
     - name: Extract Kernel
       run: |
+        mkdir -p /tmp/upload
         cd /tmp/upload
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/linux-5.4.y.tar.gz
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
