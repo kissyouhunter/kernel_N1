@@ -104,13 +104,18 @@ jobs:
         cd $BUILD_DIR                    
         ./set_make
 
-    - name: Extract Kernel
+    - name: Pack Kernel  
       run: |
         cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
-        mkdir -p /tmp/upload/${KERNEL_NUMBER} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload && cd /tmp/upload
+        mkdir -p /tmp/upload/${KERNEL_NUMBER} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload
+
+    - name: Extract Kernel
+      run: |
+        cd /tmp/upload
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz
         gzip -d ${ARMBIAN_VER}.img.gz
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
+        echo "$loop_armbian"
         sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
         sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/ -v && sudo cp $GITHUB_WORKSPACE/install_kernel.py /mnt/root/install_kernel.py -v
         sudo chmod +x /mnt/root/install_kernel.py
