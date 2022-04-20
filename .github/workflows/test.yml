@@ -21,7 +21,7 @@ env:
   SERVERCHAN_SCKEY: true
   TOOLCHAIN_URL: https://snapshots.linaro.org/gnu-toolchain/12.0-2022.02-1/aarch64-linux-gnu
   TOOLCHAIN: gcc-linaro-12.0.1-2022.02-x86_64_aarch64-linux-gnu.tar.xz
-  ARMBIAN_VER: Armbian_22.05.0_Aml_s905d_focal_5.4.189_2022.04.20.2043.img.gz
+  ARMBIAN_VER: Armbian_22.05.0_Aml_s905d_focal_5.4.189_2022.04.20.2043
 jobs:
   build:
     runs-on: ubuntu-20.04
