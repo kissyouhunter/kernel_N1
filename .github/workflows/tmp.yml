@@ -11,11 +11,7 @@ on:
       set_kernel:
         description: "KERNEL: 5.4 / 5.10 / 5.15 / 5.16"
         required: true
-        default: ""
-      set_number:
-        description: "NUMBER: 5.4.x / 5.10.x / 5.15.x / 5.16.x"
-        required: false
-        default: ""        
+        default: ""    
 env:
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
@@ -43,8 +39,6 @@ jobs:
             echo "REPO_URL=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
             echo "KVER=5.16.y" >> $GITHUB_ENV
         fi
-        set_number="${{ github.event.inputs.set_number }}"
-        echo "KERNEL_NUMBER=${set_number}" >> $GITHUB_ENV
         
     - name: telegrame_bot
       run: |
@@ -103,18 +97,13 @@ jobs:
         cd $BUILD_DIR                    
         ./set_make
 
-    - name: Extract Kernel
-      run: |
-        cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
-
-
     - name: Organize files
       id: organize
       run: |
         cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
         sudo mkdir -p /tmp/upload
         sudo mv -v linux-${KVER}.tar.gz /tmp/upload/
-        cd /tmp/upload && sudo chmod -R 777 .
+        cd /tmp/upload && sudo chmod -R 777 /tmp/upload/
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
