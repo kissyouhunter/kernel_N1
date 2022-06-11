@@ -33,7 +33,7 @@ apt remove -y linux-image-current-meson64
 #即将安装的内核版本
 new_kernel=n1kernel-kissyouhunter
 #安装完新内核删除老内核版本
-old_kernel=5.10.100-kissyouhunter
+old_kernel=5.4.189-kissyouhunter
 #内核源码
 kernel_code=linux-kernelnumber
 #各文件路径变量
@@ -42,7 +42,7 @@ boot_path=/boot
 dtb_path=/boot/dtb/amlogic
 new_dtb_path=/arch/arm64/boot/dts/amlogic
 modules_path=/usr/lib/modules
-out_header=/root/header
+out_kernel=/root/header
 cd ${root_path}
 #解压 Armbian 源码包
 #unzip ${kernel_code}.tar.gz.zip
@@ -65,10 +65,10 @@ cd ${boot_path} && cp -r vmlinuz-${new_kernel} zImage && cp -r uInitrd uInitrd-$
 cd ${dtb_path} && rm -f *
 cp ${root_path}/${new_kernel}/${new_dtb_path}/*.dtb ${dtb_path}
 #安装header
-mkdir -p ${out_header}
-make INSTALL_HDR_PATH=${out_header} headers_install
+mkdir -p ${out_kernel}
+make INSTALL_HDR_PATH=${out_kernel} headers_install
 #打包header
-tar zcvf header-${new_kernel}.tar.gz ${out_header}
+tar zcvf header-${new_kernel}.tar.gz ${out_kernel}
 #cp ${root_path}/${new_kernel}/${new_dtb_path}/meson-gxl-s905d-phicomm-n1-thresh.dtb ${dtb_path}
 #打包boot模块
 cd ${boot_path} && tar zcvf boot-${new_kernel}.tar.gz *-${new_kernel} && cp -r boot-${new_kernel}.tar.gz ${root_path}
