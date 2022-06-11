@@ -42,7 +42,7 @@ boot_path=/boot
 dtb_path=/boot/dtb/amlogic
 new_dtb_path=/arch/arm64/boot/dts/amlogic
 modules_path=/usr/lib/modules
-out_kernel=/root/header
+new_header_path=/root/header
 cd ${root_path}
 #解压 Armbian 源码包
 #unzip ${kernel_code}.tar.gz.zip
@@ -60,15 +60,14 @@ fi
 
 #安装内核模块
 cd ${new_kernel}
+mkdir -p ${new_header_path}
+make INSTALL_HDR_PATH=${new_header_path} headers_install
 make modules_install && make install
 cd ${boot_path} && cp -r vmlinuz-${new_kernel} zImage && cp -r uInitrd uInitrd-${new_kernel}
 cd ${dtb_path} && rm -f *
 cp ${root_path}/${new_kernel}/${new_dtb_path}/*.dtb ${dtb_path}
-#安装header
-mkdir -p ${out_kernel}
-make INSTALL_HDR_PATH=${out_kernel} headers_install
 #打包header
-tar zcvf header-${new_kernel}.tar.gz ${out_kernel}
+tar zcvf header-${new_kernel}.tar.gz ${new_header_path}
 #cp ${root_path}/${new_kernel}/${new_dtb_path}/meson-gxl-s905d-phicomm-n1-thresh.dtb ${dtb_path}
 #打包boot模块
 cd ${boot_path} && tar zcvf boot-${new_kernel}.tar.gz *-${new_kernel} && cp -r boot-${new_kernel}.tar.gz ${root_path}
