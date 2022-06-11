@@ -128,6 +128,7 @@ jobs:
         sudo cp /mnt/root/boot-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         sudo cp /mnt/root/modules-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
+        sudo cp /mnt/root/header-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         cd /tmp/upload/ && tar -zcvf ${KERNEL_NUMBER}.tar.gz ${KERNEL_NUMBER}
         rm -rf ${KERNEL_NUMBER} && rm -f ${ARMBIAN_VER}.img
         cd /tmp/upload && sudo chmod -R 777 /tmp/upload/
