@@ -42,6 +42,7 @@ boot_path=/boot
 dtb_path=/boot/dtb/amlogic
 new_dtb_path=/arch/arm64/boot/dts/amlogic
 modules_path=/usr/lib/modules
+out_header=/root/header
 cd ${root_path}
 #解压 Armbian 源码包
 #unzip ${kernel_code}.tar.gz.zip
@@ -63,6 +64,11 @@ make modules_install && make install
 cd ${boot_path} && cp -r vmlinuz-${new_kernel} zImage && cp -r uInitrd uInitrd-${new_kernel}
 cd ${dtb_path} && rm -f *
 cp ${root_path}/${new_kernel}/${new_dtb_path}/*.dtb ${dtb_path}
+#安装header
+mkdir -p ${out_header}
+make INSTALL_HDR_PATH=${out_header} headers_install
+#打包header
+tar zcvf header-${new_kernel}.tar.gz ${out_header}
 #cp ${root_path}/${new_kernel}/${new_dtb_path}/meson-gxl-s905d-phicomm-n1-thresh.dtb ${dtb_path}
 #打包boot模块
 cd ${boot_path} && tar zcvf boot-${new_kernel}.tar.gz *-${new_kernel} && cp -r boot-${new_kernel}.tar.gz ${root_path}
@@ -78,7 +84,7 @@ rm -r ${dtb_path}/dtb-amlogic-${new_kernel}.tar.gz
 rm -r ${modules_path}/modules-${new_kernel}.tar.gz
 rm -rf ${root_path}/${new_kernel}
 #判断文件是否存在
-if [[ -a "${root_path}/boot-${new_kernel}.tar.gz" && -a "${root_path}/dtb-amlogic-${new_kernel}.tar.gz" && -a "${root_path}/modules-${new_kernel}.tar.gz" ]]; then
+if [[ -a "${root_path}/boot-${new_kernel}.tar.gz" && -a "${root_path}/dtb-amlogic-${new_kernel}.tar.gz" && -a "${root_path}/modules-${new_kernel}.tar.gz" && -a "${root_path}/header-${new_kernel}.tar.gz" ]]; then
 	TIME g "   _____ _    _  _____ _____ ______  _____ _____ _ "
 	TIME g "  / ____| |  | |/ ____/ ____|  ____|/ ____/ ____| |"
 	TIME g " | (___ | |  | | |   | |    | |__  | (___| (___ | |"
