@@ -42,7 +42,7 @@ boot_path=/boot
 dtb_path=/boot/dtb/amlogic
 new_dtb_path=/arch/arm64/boot/dts/amlogic
 modules_path=/usr/lib/modules
-new_header_path=header
+new_header_path=/root/header
 cd ${root_path}
 #解压 Armbian 源码包
 #unzip ${kernel_code}.tar.gz.zip
