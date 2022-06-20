@@ -2,6 +2,6 @@
 
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-linux-gnu-
-export PATH=/opt/gcc-linaro-13.0.0-2022.06-x86_64_aarch64-linux-gnu/bin/:$PATH
+export PATH=/opt/gcc-linaro-11.3.1-2022.06-x86_64_aarch64-linux-gnu/bin/:$PATH
 
 make -j$(nproc) LOCALVERSION="-kissyouhunter" Image dtbs modules
