@@ -47,14 +47,26 @@ cd ${root_path}
 #解压 Armbian 源码包
 #unzip ${kernel_code}.tar.gz.zip
 #rm -f ${kernel_code}.tar.gz.zip
-tar zxvf ${kernel_code}.tar.gz
+tar zxf ${kernel_code}.tar.gz
 rm -f ${kernel_code}.tar.gz
 mv ${kernel_code} ${new_kernel}
 
 if [ -a "${root_path}/${new_kernel}" ]; then
-    TIME g "success!"
+	TIME g " --------------------文件解压----------------------"
+	TIME g "   _____ _    _  _____ _____ ______  _____ _____ _ "
+	TIME g "  / ____| |  | |/ ____/ ____|  ____|/ ____/ ____| |"
+	TIME g " | (___ | |  | | |   | |    | |__  | (___| (___ | |"
+	TIME g "  \___ \| |  | | |   | |    |  __|  \___ \\___ \| |"
+	TIME g "  ____) | |__| | |___| |____| |____ ____) |___) |_|"
+	TIME g " |_____/ \____/ \_____\_____|______|_____/_____/(_)"
 else
-    TIME r "failed!"
+	TIME r " ---------------文件解压----------------"
+	TIME r "______ ___  _____ _      ___________ _ "
+	TIME r "|  ___/ _ \|_   _| |    |  ___|  _  \ |"
+	TIME r "| |_ / /_\ \ | | | |    | |__ | | | | |"
+	TIME r "|  _||  _  | | | | |    |  __|| | | | |"
+	TIME r "| |  | | | |_| |_| |____| |___| |/ /|_|"
+	TIME r "\_|  \_| |_/\___/\_____/\____/|___/ (_)"
     exit 0
 fi
 
@@ -67,14 +79,14 @@ cd ${boot_path} && cp -r vmlinuz-${new_kernel} zImage && cp -r uInitrd uInitrd-$
 cd ${dtb_path} && rm -f *
 cp ${root_path}/${new_kernel}/${new_dtb_path}/*.dtb ${dtb_path}
 #打包header
-cd ${new_header_path} && tar zcvf header-${new_kernel}.tar.gz * && cp -r header-${new_kernel}.tar.gz ${root_path}
+cd ${new_header_path} && tar zcf header-${new_kernel}.tar.gz * && cp -r header-${new_kernel}.tar.gz ${root_path}
 #cp ${root_path}/${new_kernel}/${new_dtb_path}/meson-gxl-s905d-phicomm-n1-thresh.dtb ${dtb_path}
 #打包boot模块
-cd ${boot_path} && tar zcvf boot-${new_kernel}.tar.gz *-${new_kernel} && cp -r boot-${new_kernel}.tar.gz ${root_path}
+cd ${boot_path} && tar zcf boot-${new_kernel}.tar.gz *-${new_kernel} && cp -r boot-${new_kernel}.tar.gz ${root_path}
 #打包dtb文件
-cd ${dtb_path} && tar zcvf dtb-amlogic-${new_kernel}.tar.gz *.dtb && cp -r dtb-amlogic-${new_kernel}.tar.gz ${root_path}
+cd ${dtb_path} && tar zcf dtb-amlogic-${new_kernel}.tar.gz *.dtb && cp -r dtb-amlogic-${new_kernel}.tar.gz ${root_path}
 #打包modules模块
-cd ${modules_path} && tar zcvf modules-${new_kernel}.tar.gz ${new_kernel} && cp -r modules-${new_kernel}.tar.gz ${root_path}
+cd ${modules_path} && tar zcf modules-${new_kernel}.tar.gz ${new_kernel} && cp -r modules-${new_kernel}.tar.gz ${root_path}
 #删除多余内核文件
 rm -r ${boot_path}/*-${old_kernel} && rm -r ${modules_path}/${old_kernel}
 #删除打文件
@@ -84,6 +96,7 @@ rm -r ${modules_path}/modules-${new_kernel}.tar.gz
 rm -rf ${root_path}/${new_kernel}
 #判断文件是否存在
 if [[ -a "${root_path}/boot-${new_kernel}.tar.gz" && -a "${root_path}/dtb-amlogic-${new_kernel}.tar.gz" && -a "${root_path}/modules-${new_kernel}.tar.gz" && -a "${root_path}/header-${new_kernel}.tar.gz" ]]; then
+	TIME g " ----------------------内核------------------------"
 	TIME g "   _____ _    _  _____ _____ ______  _____ _____ _ "
 	TIME g "  / ____| |  | |/ ____/ ____|  ____|/ ____/ ____| |"
 	TIME g " | (___ | |  | | |   | |    | |__  | (___| (___ | |"
@@ -91,6 +104,7 @@ if [[ -a "${root_path}/boot-${new_kernel}.tar.gz" && -a "${root_path}/dtb-amlogi
 	TIME g "  ____) | |__| | |___| |____| |____ ____) |___) |_|"
 	TIME g " |_____/ \____/ \_____\_____|______|_____/_____/(_)"
 else
+	TIME r " ----------------内核-------------------"
 	TIME r "______ ___  _____ _      ___________ _ "
 	TIME r "|  ___/ _ \|_   _| |    |  ___|  _  \ |"
 	TIME r "| |_ / /_\ \ | | | |    | |__ | | | | |"

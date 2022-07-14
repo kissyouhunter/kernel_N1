@@ -89,7 +89,7 @@ jobs:
       run: |
         cd /opt
         sudo wget $TOOLCHAIN_URL/$TOOLCHAIN
-        sudo tar -xvf $TOOLCHAIN
+        sudo tar -xf $TOOLCHAIN
         cd $BUILD_DIR
         rm -f set_*
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_clean set_clean -v
@@ -106,7 +106,7 @@ jobs:
 
     - name: Pack Kernel  
       run: |
-        cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
+        cd /tmp && mv kernel/ linux-${KVER} && tar -zcf linux-${KVER}.tar.gz linux-${KVER}/
         mkdir -p /tmp/upload/${KERNEL_NUMBER} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload
 
     - name: Extract Kernel
@@ -129,7 +129,7 @@ jobs:
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         sudo cp /mnt/root/modules-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         sudo cp /mnt/root/header-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
-        cd /tmp/upload/ && tar -zcvf ${KERNEL_NUMBER}.tar.gz ${KERNEL_NUMBER}
+        cd /tmp/upload/ && tar -zcf ${KERNEL_NUMBER}.tar.gz ${KERNEL_NUMBER}
         rm -rf ${KERNEL_NUMBER} && rm -f ${ARMBIAN_VER}.img
         cd /tmp/upload && sudo chmod -R 777 /tmp/upload/
         rm -f ${ARMBIAN_VER}.img
