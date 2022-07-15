@@ -104,13 +104,10 @@ jobs:
         cd $BUILD_DIR                    
         ./set_make
 
-    - name: Pack Kernel  
+    - name: Extract Kernel
       run: |
         cd /tmp && mv kernel/ linux-${KVER} && tar -zcf linux-${KVER}.tar.gz linux-${KVER}/
         mkdir -p /tmp/upload/${KERNEL_NUMBER} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload
-
-    - name: Extract Kernel
-      run: |
         cd /tmp/upload
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz && sync
         gzip -d ${ARMBIAN_VER}.img.gz
