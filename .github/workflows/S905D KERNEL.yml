@@ -9,11 +9,11 @@ on:
         required: false
         default: 'false'
       set_kernel:
-        description: "KERNEL: 5.4 / 5.10 / 5.15 / 5.17 / 5.18"
+        description: "KERNEL: 4.19 / 5.4 / 5.10 / 5.15 / 5.17 / 5.18"
         required: true
         default: ""
       set_number:
-        description: "NUMBER: 5.4.x / 5.10.x / 5.15.x / 5.17.x / 5.18.x"
+        description: "NUMBER: 4.19.x / 5.4.x / 5.10.x / 5.15.x / 5.17.x / 5.18.x"
         required: true
         default: ""        
 env:
@@ -42,9 +42,9 @@ jobs:
         elif [ "$set_kernel" = "5.18" ]; then
             echo "REPO_URL=https://github.com/unifreq/linux-5.18.y.git" >> $GITHUB_ENV
             echo "KVER=5.18.y" >> $GITHUB_ENV
-        elif [ "$set_kernel" = "5.17" ]; then
-            echo "REPO_URL=https://github.com/unifreq/linux-5.17.y.git" >> $GITHUB_ENV
-            echo "KVER=5.17.y" >> $GITHUB_ENV
+        elif [ "$set_kernel" = "4.19" ]; then
+            echo "REPO_URL=https://github.com/kissyouhunter/linux-4.19.y.git" >> $GITHUB_ENV
+            echo "KVER=4.19.y" >> $GITHUB_ENV
         fi
         set_number="${{ github.event.inputs.set_number }}"
         echo "KERNEL_NUMBER=${set_number}" >> $GITHUB_ENV
