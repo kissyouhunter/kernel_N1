@@ -103,6 +103,7 @@ jobs:
       run: |
         cd $BUILD_DIR                    
         ./set_make
+        ./set_make
 
     - name: Extract Kernel
       run: |
