@@ -33,7 +33,7 @@ apt remove -y linux-image-current-meson64
 #即将安装的内核版本
 new_kernel=n1kernel-kissyouhunter
 #安装完新内核删除老内核版本
-old_kernel=5.4.189-kissyouhunter
+old_kernel=5.4.204-kissyouhunter
 #内核源码
 kernel_code=linux-kernelnumber
 #各文件路径变量
