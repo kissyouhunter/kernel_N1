@@ -114,11 +114,7 @@ jobs:
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
         sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
         sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/linux-${KVER}.tar.gz -v
-        if [ "$set_kernel" = "4.19" ]; then
-            sudo cp $GITHUB_WORKSPACE/install_kernel_4.19.sh /mnt/root/install_kernel.sh -v
-        else
-            sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
-        fi
+        sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
         sudo chmod +x /mnt/root/install_kernel.sh
         sudo sed -i 's|n1kernel|'"$KERNEL_NUMBER"'|g' /mnt/root/install_kernel.sh
         sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
@@ -130,11 +126,7 @@ jobs:
         sudo cp /mnt/root/boot-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         sudo cp /mnt/root/dtb-amlogic-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         sudo cp /mnt/root/modules-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
-        if [ "$set_kernel" = "4.19" ]; then
-            echo "there is no header"
-        else
-            sudo cp /mnt/root/header-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
-        fi
+        sudo cp /mnt/root/header-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
         cd /tmp/upload/ && tar -zcf ${KERNEL_NUMBER}.tar.gz ${KERNEL_NUMBER}
         rm -rf ${KERNEL_NUMBER} && rm -f ${ARMBIAN_VER}.img
         cd /tmp/upload && sudo chmod -R 777 /tmp/upload/
