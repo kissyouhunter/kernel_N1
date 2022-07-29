@@ -1,4 +1,4 @@
-name: tmp
+name: N1 LATESET KERNEL
 
 on:
   repository_dispatch:
@@ -9,15 +9,25 @@ on:
         required: false
         default: 'false'
       set_kernel:
-        description: "KERNEL: 4.19 / 5.4 / 5.10 / 5.15 / 5.16 / 5.17"
+        description: "KERNEL: 5.4 / 5.10 / 5.15 / 5.18"
         required: true
-        default: ""    
+        default: ""
+      set_number:
+        description: "NUMBER: 5.4.x / 5.10.x / 5.15.x / 5.18.x"
+        required: true
+        default: ""
+      set_update:
+        description: "NUMBER: 5.4.x-x / 5.10.x-x / 5.15.x-x / 5.18.x-x"
+        required: false
+        default: ""
 env:
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
   TOOLCHAIN_URL: https://snapshots.linaro.org/gnu-toolchain/11.3-2022.06-1/aarch64-linux-gnu
   TOOLCHAIN: gcc-linaro-11.3.1-2022.06-x86_64_aarch64-linux-gnu.tar.xz
-  ARMBIAN_VER: Armbian_22.05.0_Aml_s905d_focal_5.4.189_2022.04.20.2043
+  ARMBIAN_VER: Armbian_22.08.0_Aml_s905d_jammy_5.4.205_2022.07.16
+  UPDATE_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/incr
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -35,16 +45,12 @@ jobs:
         elif [ "$set_kernel" = "5.15" ]; then
             echo "REPO_URL=https://github.com/unifreq/linux-5.15.y.git" >> $GITHUB_ENV
             echo "KVER=5.15.y" >> $GITHUB_ENV
-        elif [ "$set_kernel" = "5.16" ]; then
-            echo "REPO_URL=https://github.com/unifreq/linux-5.16.y.git" >> $GITHUB_ENV
-            echo "KVER=5.16.y" >> $GITHUB_ENV
-        elif [ "$set_kernel" = "5.17" ]; then
-            echo "REPO_URL=https://github.com/unifreq/linux-5.17.y.git" >> $GITHUB_ENV
-            echo "KVER=5.17.y" >> $GITHUB_ENV
-        elif [ "$set_kernel" = "4.19" ]; then
-            echo "REPO_URL=https://github.com/kissyouhunter/linux-4.19.y.git" >> $GITHUB_ENV
-            echo "KVER=4.19.y" >> $GITHUB_ENV
+        elif [ "$set_kernel" = "5.18" ]; then
+            echo "REPO_URL=https://github.com/unifreq/linux-5.18.y.git" >> $GITHUB_ENV
+            echo "KVER=5.18.y" >> $GITHUB_ENV
         fi
+        set_number="${{ github.event.inputs.set_number }}"
+        echo "KERNEL_NUMBER=${set_number}" >> $GITHUB_ENV
         
     - name: telegrame_bot
       run: |
@@ -55,11 +61,11 @@ jobs:
         rm -rf CPU
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 编译 ${{ github.event.inputs.set_kernel }} 内核,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 编译 ${{ github.event.inputs.set_number }} 内核,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
 
     - name: Checkout
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@main
 
     - name: Initialization environment
       env:
@@ -86,7 +92,7 @@ jobs:
       run: |
         cd /opt
         sudo wget $TOOLCHAIN_URL/$TOOLCHAIN
-        sudo tar -xvf $TOOLCHAIN
+        sudo tar -xf $TOOLCHAIN
         cd $BUILD_DIR
         rm -f set_*
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_clean set_clean -v
@@ -95,19 +101,42 @@ jobs:
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_menuconfig set_menuconfig -v
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/.config .config -v
         chmod 755 set_*
+        curl -LO ${UPDATE_URL}/path-${{ github.event.inputs.set_update }}.xz
+        unxz path-${{ github.event.inputs.set_update }}.xz
+        patch p1 < path-${{ github.event.inputs.set_update }}
              
     - name: Build Kernel  
       run: |
         cd $BUILD_DIR                    
         ./set_make
 
+    - name: Extract Kernel
+      run: |
+        cd /tmp && mv kernel/ linux-${KVER} && tar -zcf linux-${KVER}.tar.gz linux-${KVER}/
+        mkdir -p /tmp/upload/${KERNEL_NUMBER} && mv /tmp/linux-${KVER}.tar.gz /tmp/upload
+        cd /tmp/upload
+        curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz && sync
+        gzip -d ${ARMBIAN_VER}.img.gz
+        loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
+        sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
+        sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/linux-${KVER}.tar.gz -v
+        sudo cp $GITHUB_WORKSPACE/install_kernel.sh /mnt/root/install_kernel.sh -v
+        sudo chmod +x /mnt/root/install_kernel.sh
+        sudo sed -i 's|n1kernel|'"$KERNEL_NUMBER"'|g' /mnt/root/install_kernel.sh
+        sudo sed -i 's|kernelnumber|'"$KVER"'|g' /mnt/root/install_kernel.sh
+        sudo chroot /mnt /bin/bash -c "./root/install_kernel.sh"
+
     - name: Organize files
       id: organize
       run: |
-        cd /tmp && mv kernel/ linux-${KVER} && tar -zcvf linux-${KVER}.tar.gz linux-${KVER}/
-        sudo mkdir -p /tmp/upload
-        sudo mv -v linux-${KVER}.tar.gz /tmp/upload/
+        sudo cp /mnt/root/boot-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
+        sudo cp /mnt/root/dtb-amlogic-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
+        sudo cp /mnt/root/modules-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
+        sudo cp /mnt/root/header-${KERNEL_NUMBER}-kissyouhunter.tar.gz /tmp/upload/${KERNEL_NUMBER}
+        cd /tmp/upload/ && tar -zcf ${KERNEL_NUMBER}.tar.gz ${KERNEL_NUMBER}
+        rm -rf ${KERNEL_NUMBER} && rm -f ${ARMBIAN_VER}.img
         cd /tmp/upload && sudo chmod -R 777 /tmp/upload/
+        rm -f ${ARMBIAN_VER}.img
         echo "KERNEL=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
@@ -127,5 +156,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库编译 ${{ github.event.inputs.set_kernel }} 内核顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库编译 ${{ github.event.inputs.set_number }} 内核顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
