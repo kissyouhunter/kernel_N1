@@ -84,12 +84,6 @@ jobs:
     - name: Clone repos
       run: |
         git clone $REPO_URL $BUILD_DIR
-        
-    - name: Installing cross compile toolchain
-      run: |
-        cd /opt
-        sudo wget $TOOLCHAIN_URL/$TOOLCHAIN
-        sudo tar -xf $TOOLCHAIN
         cd $BUILD_DIR
         rm -f set_*
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_clean set_clean -v
@@ -98,6 +92,12 @@ jobs:
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/set_menuconfig set_menuconfig -v
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/.config .config -v
         chmod 755 set_*
+        
+    - name: Installing cross compile toolchain
+      run: |
+        cd /opt
+        sudo wget $TOOLCHAIN_URL/$TOOLCHAIN
+        sudo tar -xf $TOOLCHAIN
              
     - name: Build Kernel  
       run: |
