@@ -17,7 +17,7 @@ on:
         required: true
         default: ""
       set_update:
-        description: "NUMBER: 5.4.x-x / 5.10.x-x / 5.15.x-x / 5.18.x-x"
+        description: "UPDATE FILE: 5.4.x-x / 5.10.x-x / 5.15.x-x / 5.18.x-x"
         required: false
         default: ""
 env:
