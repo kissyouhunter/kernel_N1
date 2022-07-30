@@ -95,8 +95,10 @@ jobs:
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/.config .config -v
         chmod 755 set_*
         rm -f set_*
-        curl -LO ${UPDATE_URL}/patch-${{ github.event.inputs.set_update }}.xz && sync
+        wget ${UPDATE_URL}/patch-${{ github.event.inputs.set_update }}.xz && sync
+        ls *.xz
         unxz patch-${{ github.event.inputs.set_update }}.xz
+        ls patch-*
         patch p1 < patch-${{ github.event.inputs.set_update }}
         
     - name: Installing cross compile toolchain
