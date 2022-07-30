@@ -96,7 +96,7 @@ jobs:
         chmod 755 set_*
         rm -f set_*
         update_file="${{ github.event.inputs.set_update }}"
-        curl -LO ${UPDATE_URL}/patch-${update_file}.xz and sync
+        curl -LO ${UPDATE_URL}/patch-${update_file}.xz && sync
         unxz patch-${update_file}.xz
         patch p1 < patch-${update_file}
         
