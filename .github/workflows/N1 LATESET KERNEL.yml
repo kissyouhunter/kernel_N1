@@ -99,7 +99,7 @@ jobs:
         wget https://cdn.kernel.org/pub/linux/kernel/v5.x/incr/patch-5.4.207-208.xz && sync
         unxz patch-5.4.207-208.xz
         ls
-        patch p1 < patch-5.4.207-208.xz
+        patch p1 < patch-5.4.207-208
         #unxz patch-${{ github.event.inputs.set_update }}.xz
         #ls patch-*
         #patch p1 < patch-${{ github.event.inputs.set_update }}
