@@ -96,7 +96,7 @@ jobs:
         chmod 755 set_*
         rm -f set_*
         #wget ${UPDATE_URL}/patch-${{ github.event.inputs.set_update }}.xz && sync
-        wget https://cdn.kernel.org/pub/linux/kernel/v5.x/incr/patch-5.4.207-208.xz
+        wget https://cdn.kernel.org/pub/linux/kernel/v5.x/incr/patch-5.4.207-208.xz && sync
         unxz patch-5.4.207-208.xz
         ls
         patch p1 < patch-5.4.207-208.xz
