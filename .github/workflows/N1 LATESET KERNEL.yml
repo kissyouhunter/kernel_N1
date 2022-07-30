@@ -95,11 +95,13 @@ jobs:
         cp $GITHUB_WORKSPACE/files/linux-${KVER}/.config .config -v
         chmod 755 set_*
         rm -f set_*
-        wget ${UPDATE_URL}/patch-${{ github.event.inputs.set_update }}.xz && sync
-        ls *.xz
-        unxz patch-${{ github.event.inputs.set_update }}.xz
-        ls patch-*
-        patch p1 < patch-${{ github.event.inputs.set_update }}
+        #wget ${UPDATE_URL}/patch-${{ github.event.inputs.set_update }}.xz && sync
+        wget https://cdn.kernel.org/pub/linux/kernel/v5.x/incr/patch-5.4.207-208.xz
+        unxz patch-5.4.207-208.xz
+        patch p1 < patch-5.4.207-208.xz
+        #unxz patch-${{ github.event.inputs.set_update }}.xz
+        #ls patch-*
+        #patch p1 < patch-${{ github.event.inputs.set_update }}
         
     - name: Installing cross compile toolchain
       run: |
