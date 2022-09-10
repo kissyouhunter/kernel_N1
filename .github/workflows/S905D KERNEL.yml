@@ -56,8 +56,7 @@ jobs:
         sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
         CPUNAME="$(awk 'NR==1' CPU)" && CPUCORES="$(awk 'NR==2' CPU)"
         rm -rf CPU
-        cd /tmp
-        df -hT $PWD
+        df -hT
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
           您正在使用kissyouhunter仓库 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 编译 ${{ github.event.inputs.set_number }} 内核,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
@@ -104,7 +103,7 @@ jobs:
     - name: Build Kernel  
       run: |
         cd $BUILD_DIR
-        df -hT $PWD
+        df -hT
         ./set_make
 
     - name: Extract Kernel
@@ -114,7 +113,7 @@ jobs:
         cd /tmp/upload
         curl -LO https://github.com/kissyouhunter/kernel_N1/releases/download/armbian/${ARMBIAN_VER}.img.gz && sync
         gzip -d ${ARMBIAN_VER}.img.gz
-        df -hT $PWD
+        df -hT
         loop_armbian=$(sudo losetup -P -f --show "${ARMBIAN_VER}.img")
         sudo mount ${loop_armbian}p2 /mnt/ && sudo mount ${loop_armbian}p1 /mnt/boot/
         sudo mv /tmp/upload/linux-${KVER}.tar.gz /mnt/root/linux-${KVER}.tar.gz -v
