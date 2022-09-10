@@ -9,11 +9,11 @@ on:
         required: false
         default: 'false'
       set_kernel:
-        description: "KERNEL: 5.4 / 5.10 / 5.15 / 5.18 / 5.19"
+        description: "KERNEL: 5.4 / 5.10 / 5.15 / 5.19"
         required: true
         default: ""
       set_number:
-        description: "NUMBER: 5.4.x / 5.10.x / 5.15.x / 5.18.x / 5.19.x"
+        description: "NUMBER: 5.4.x / 5.10.x / 5.15.x / 5.19.x"
         required: true
         default: ""        
 env:
