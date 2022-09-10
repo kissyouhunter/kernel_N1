@@ -55,7 +55,6 @@ jobs:
         sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
         CPUNAME="$(awk 'NR==1' CPU)" && CPUCORES="$(awk 'NR==2' CPU)"
         rm -rf CPU
-        rm -rf $GITHUB_WORKSPACE/kernel
         df -hT $PWD
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
@@ -84,6 +83,7 @@ jobs:
         
     - name: Clone repos
       run: |
+        rm -rf kernel
         git clone $REPO_URL kernel
         cd kernel
         rm -f set_*
