@@ -19,7 +19,7 @@ on:
 env:
   BUILD_DIR: /tmp/kernel
   SERVERCHAN_SCKEY: true
-  TOOLCHAIN_URL: https://snapshots.linaro.org/gnu-toolchain/11.3-2022.06-1/aarch64-linux-gnu
+  TOOLCHAIN_URL: https://github.com/kissyouhunter/kernel_N1/releases/download/toolchain
   TOOLCHAIN: gcc-linaro-11.3.1-2022.06-x86_64_aarch64-linux-gnu.tar.xz
   ARMBIAN_VER: Armbian_22.08.0_Aml_s905d_jammy_5.4.205_2022.07.16
 jobs:
