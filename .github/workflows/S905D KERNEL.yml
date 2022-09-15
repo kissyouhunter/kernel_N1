@@ -62,7 +62,7 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@main
-        
+        rm -rf kernel
 
     - name: Initialization environment
       env:
