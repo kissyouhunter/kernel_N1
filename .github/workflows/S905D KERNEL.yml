@@ -50,6 +50,7 @@ jobs:
         
     - name: telegrame_bot
       run: |
+        ls -a
         cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c > CPU
         cat /proc/cpuinfo | grep "cpu cores" | uniq >> CPU
         sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
@@ -62,8 +63,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@main
-      run: |
-        rm -rf kernel
 
     - name: Initialization environment
       env:
